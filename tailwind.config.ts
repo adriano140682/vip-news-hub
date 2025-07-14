@@ -52,6 +52,10 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				'news-highlight': 'hsl(var(--news-highlight))',
+				'news-category': 'hsl(var(--news-category))',
+				'vip-gold': 'hsl(var(--vip-gold))',
+				'news-card-bg': 'hsl(var(--news-card-bg))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
