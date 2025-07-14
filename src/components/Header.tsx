@@ -1,15 +1,16 @@
 import { Search, Menu, User, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const categories = [
-    { name: "INÍCIO", active: true },
-    { name: "POLICIAL", active: false },
-    { name: "GERAL", active: false },
-    { name: "POLÍTICA", active: false },
-    { name: "VARIEDADES", active: false },
-    { name: "PUBLICIDADE", active: false },
+    { name: "INÍCIO", path: "/categoria/inicio" },
+    { name: "POLICIAL", path: "/categoria/policial" },
+    { name: "GERAL", path: "/categoria/geral" },
+    { name: "POLÍTICA", path: "/categoria/politica" },
+    { name: "VARIEDADES", path: "/categoria/variedades" },
+    { name: "PUBLICIDADE", path: "/categoria/publicidade" },
   ];
 
   const currentDate = new Date().toLocaleDateString('pt-BR', { 
@@ -66,16 +67,13 @@ const Header = () => {
           <div className="flex items-center justify-between">
             <div className="hidden md:flex">
               {categories.map((category) => (
-                <button
+                <Link
                   key={category.name}
-                  className={`px-6 py-4 font-medium text-sm transition-all hover:bg-primary/10 ${
-                    category.active 
-                      ? 'text-primary border-b-2 border-primary bg-primary/5' 
-                      : 'text-foreground'
-                  }`}
+                  to={category.path}
+                  className="px-6 py-4 font-medium text-sm transition-all hover:bg-primary/10 text-foreground hover:text-primary"
                 >
                   {category.name}
-                </button>
+                </Link>
               ))}
             </div>
 

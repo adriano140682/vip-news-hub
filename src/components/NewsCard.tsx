@@ -1,101 +1,58 @@
-import { Clock, Eye, MessageSquare, Tag } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Calendar, User, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface NewsCardProps {
   title: string;
   summary: string;
-  category: string;
   image: string;
-  readTime: string;
-  views: number;
-  comments: number;
-  featured?: boolean;
-  urgent?: boolean;
+  category: string;
+  date: string;
+  slug: string;
+  views?: number;
 }
 
-const NewsCard = ({ 
-  title, 
-  summary, 
-  category, 
-  image, 
-  readTime, 
-  views, 
-  comments,
-  featured = false,
-  urgent = false 
-}: NewsCardProps) => {
+const NewsCard = ({ title, summary, image, category, date, slug, views = 0 }: NewsCardProps) => {
   return (
-    <Card className={`group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${
-      featured ? 'md:col-span-2 md:row-span-2' : ''
-    } bg-news-card-bg border-border`}>
-      <div className="relative">
-        <img 
-          src={image} 
-          alt={title}
-          className={`w-full object-cover transition-transform duration-300 group-hover:scale-105 ${
-            featured ? 'h-64 md:h-80' : 'h-48'
-          }`}
-        />
-        
-        {/* Category Badge */}
-        <Badge 
-          className={`absolute top-4 left-4 ${
-            urgent ? 'bg-news-highlight text-white' : 'bg-news-category text-white'
-          }`}
-        >
-          <Tag className="h-3 w-3 mr-1" />
-          {category}
-        </Badge>
-
-        {/* Urgent Badge */}
-        {urgent && (
-          <Badge className="absolute top-4 right-4 bg-news-highlight text-white animate-pulse">
-            URGENTE
+    <Link to={`/artigo/${slug}`}>
+      <Card className="group cursor-pointer overflow-hidden border-border bg-card hover:shadow-lg transition-all duration-300 hover:shadow-primary/10">
+        <div className="relative overflow-hidden">
+          <img 
+            src={image} 
+            alt={title}
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <Badge 
+            variant="secondary" 
+            className="absolute top-3 left-3 bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            {category}
           </Badge>
-        )}
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-      </div>
-
-      <CardContent className="p-6">
-        <h3 className={`font-bold mb-3 text-foreground line-clamp-2 group-hover:text-primary transition-colors ${
-          featured ? 'text-xl md:text-2xl' : 'text-lg'
-        }`}>
-          {title}
-        </h3>
+        </div>
         
-        <p className="text-muted-foreground mb-4 line-clamp-3">
-          {summary}
-        </p>
-
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <div className="p-4 space-y-3">
+          <h3 className="font-bold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+            {title}
+          </h3>
+          
+          <p className="text-muted-foreground text-sm line-clamp-3">
+            {summary}
+          </p>
+          
+          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border">
             <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              <span>{readTime}</span>
+              <Calendar className="h-3 w-3" />
+              <span>{date}</span>
             </div>
             <div className="flex items-center gap-1">
-              <Eye className="h-4 w-4" />
-              <span>{views}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <MessageSquare className="h-4 w-4" />
-              <span>{comments}</span>
+              <Eye className="h-3 w-3" />
+              <span>{views} views</span>
             </div>
           </div>
         </div>
-
-        <Button 
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-          size="sm"
-        >
-          Leia Mais
-        </Button>
-      </CardContent>
-    </Card>
+      </Card>
+    </Link>
   );
 };
 
