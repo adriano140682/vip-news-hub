@@ -14,8 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      ads: {
+        Row: {
+          active: boolean
+          created_at: string
+          end_date: string | null
+          id: string
+          image_url: string
+          link_url: string | null
+          position: string
+          start_date: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          image_url: string
+          link_url?: string | null
+          position?: string
+          start_date?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          image_url?: string
+          link_url?: string | null
+          position?: string
+          start_date?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       articles: {
         Row: {
+          author_id: string | null
           author_name: string | null
           category: string
           content: string
@@ -31,6 +71,7 @@ export type Database = {
           views: number | null
         }
         Insert: {
+          author_id?: string | null
           author_name?: string | null
           category?: string
           content: string
@@ -46,6 +87,7 @@ export type Database = {
           views?: number | null
         }
         Update: {
+          author_id?: string | null
           author_name?: string | null
           category?: string
           content?: string
@@ -62,6 +104,103 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          approved: boolean
+          article_id: string
+          content: string
+          created_at: string
+          email: string
+          id: string
+          user_name: string
+        }
+        Insert: {
+          approved?: boolean
+          article_id: string
+          content: string
+          created_at?: string
+          email: string
+          id?: string
+          user_name: string
+        }
+        Update: {
+          approved?: boolean
+          article_id?: string
+          content?: string
+          created_at?: string
+          email?: string
+          id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      visits: {
+        Row: {
+          article_id: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visits_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -71,9 +210,13 @@ export type Database = {
         Args: { title: string }
         Returns: string
       }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "admin" | "editor" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -200,6 +343,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["admin", "editor", "user"],
+    },
   },
 } as const
