@@ -1,9 +1,12 @@
-import { Search, Menu, User, Calendar } from "lucide-react";
+import { Search, Menu, User, Calendar, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
+  const { user, signOut, isAdmin } = useAuth();
+  
   const categories = [
     { name: "INÍCIO", path: "/categoria/inicio" },
     { name: "POLICIAL", path: "/categoria/policial" },
@@ -31,10 +34,26 @@ const Header = () => {
           </div>
           <div className="flex items-center gap-4">
             <span>Tempo Real • Notícias 24h</span>
-            <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary/20">
-              <User className="h-4 w-4 mr-2" />
-              Login
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-2">
+                {isAdmin && (
+                  <Button asChild variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary/20">
+                    <Link to="/admin">Admin</Link>
+                  </Button>
+                )}
+                <Button onClick={signOut} variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary/20">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair
+                </Button>
+              </div>
+            ) : (
+              <Button asChild variant="ghost" size="sm" className="text-primary-foreground hover:bg-primary/20">
+                <Link to="/auth">
+                  <User className="h-4 w-4 mr-2" />
+                  Login
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
