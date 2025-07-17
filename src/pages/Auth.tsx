@@ -68,6 +68,25 @@ export default function Auth() {
     setIsLoading(false);
   };
 
+  const createTestAdmin = async () => {
+    setIsLoading(true);
+    const { error } = await signUp('admin@test.com', 'admin123', 'Admin Sistema');
+    
+    if (error) {
+      toast({
+        title: 'Erro ao criar admin',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } else {
+      toast({
+        title: 'Admin criado!',
+        description: 'Use admin@test.com / admin123 para entrar.',
+      });
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
@@ -78,6 +97,15 @@ export default function Auth() {
           <CardDescription>
             Faça login ou cadastre-se para continuar
           </CardDescription>
+          <Button 
+            onClick={createTestAdmin} 
+            variant="outline" 
+            size="sm"
+            disabled={isLoading}
+            className="mt-2"
+          >
+            Criar Admin Teste
+          </Button>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
