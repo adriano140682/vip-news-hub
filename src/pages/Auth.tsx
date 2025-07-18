@@ -70,20 +70,36 @@ export default function Auth() {
 
   const createTestAdmin = async () => {
     setIsLoading(true);
-    const { error } = await signUp('admin@test.com', 'admin123', 'Admin Sistema');
     
-    if (error) {
+    try {
+      // Primeiro, tentar fazer signup
+      const { error: signupError } = await signUp('admin@test.com', 'admin123', 'Admin Sistema');
+      
+      if (signupError && !signupError.message.includes('already')) {
+        throw signupError;
+      }
+      
+      // Se o usuário já existe ou foi criado, tentar fazer login
+      const { error: signinError } = await signIn('admin@test.com', 'admin123');
+      
+      if (signinError) {
+        throw signinError;
+      }
+      
       toast({
-        title: 'Erro ao criar admin',
+        title: 'Admin criado e logado!',
+        description: 'Você está logado como admin.',
+      });
+      
+      navigate('/admin');
+    } catch (error: any) {
+      toast({
+        title: 'Erro',
         description: error.message,
         variant: 'destructive',
       });
-    } else {
-      toast({
-        title: 'Admin criado!',
-        description: 'Use admin@test.com / admin123 para entrar.',
-      });
     }
+    
     setIsLoading(false);
   };
 

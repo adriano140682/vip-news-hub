@@ -42,14 +42,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session?.user) {
           // Fetch user profile
           setTimeout(async () => {
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('user_id', session.user.id)
-              .single();
-            setProfile(profile);
-            setLoading(false);
-          }, 0);
+            try {
+              const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_id', session.user.id)
+                .single();
+              
+              if (error) {
+                console.error('Erro ao buscar perfil:', error);
+              }
+              
+              setProfile(profile);
+            } catch (err) {
+              console.error('Erro ao buscar perfil:', err);
+            } finally {
+              setLoading(false);
+            }
+          }, 100);
         } else {
           setProfile(null);
           setLoading(false);
